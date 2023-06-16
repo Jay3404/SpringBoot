@@ -2,7 +2,7 @@ package com.bit.springboard.dto;
 
 import lombok.*;
 
-@Getter @Setter @ToString @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class BoardDTO {
 
     private int boardNo;
