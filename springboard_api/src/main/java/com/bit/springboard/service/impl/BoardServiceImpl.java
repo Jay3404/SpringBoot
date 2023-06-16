@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BoardServiceImpl implements BoardService {
-
     private BoardMapper boardMapper;
 
+    //생성자 주입
     @Autowired
-    public BoardServiceImpl(BoardMapper boardMapper){
+    public BoardServiceImpl(BoardMapper boardMapper) {
+
         this.boardMapper = boardMapper;
     }
 

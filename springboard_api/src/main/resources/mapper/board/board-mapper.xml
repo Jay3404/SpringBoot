@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org/dtd/DTD Mapper 3.0//EN"
-        "http://mybatis/org/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bit.springboard.mapper.BoardMapper">
-    <select id="getBoard" parameterType="int" resultType="com.bit.springboard.dto.BoardDTO">
+    <!--<select id="getBoard"
+    parameterType="int"
+    resultType="com.bit.springboard.dto.BoardDTO">
         SELECT BOARD_NO
              , BOARD_TITLE
              , BOARD_CONTENT
@@ -12,5 +14,5 @@
              , BOARD_CNT
             FROM T_BOARD
             WHERE BOARD_NO = #{boardNo}
-    </select>
+    </select>-->
 </mapper>

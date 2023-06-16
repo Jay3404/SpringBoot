@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-                layout:decorate="~{layouts/layout}">
-
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
     <th:block layout:fragment="script">
         <script th:inline="javascript">
-            $(function () {
+            const userId = '${loginUser.userId}';
+            $(function() {
                 alert("hello");
             });
         </script>
@@ -18,12 +19,10 @@
             }
         </style>
     </th:block>
-    <title></title>
-
 </head>
 <body>
     <div layout:fragment="content">
-        <div style="text-align: center">
+        <div style="text-align: center;">
             <h1>게시판 홈</h1>
             <p>간단한 게시판 기능 구현</p>
         </div>

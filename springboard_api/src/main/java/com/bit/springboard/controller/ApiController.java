@@ -4,20 +4,22 @@ import com.bit.springboard.dto.BoardDTO;
 import com.bit.springboard.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController // @Controller + @ResponseBody
+@RestController //@Controller + @ResponseBody
 @RequestMapping("/api")
 public class ApiController {
     private BoardService boardService;
 
     //생성자 주입
     @Autowired
-    public ApiController(BoardService boardService ){
+    public ApiController(BoardService boardService) {
+
         this.boardService = boardService;
     }
 
@@ -29,12 +31,17 @@ public class ApiController {
         returnMap.put("second", "two");
 
         return returnMap;
-
     }
-
 
     @GetMapping("/board")
-    public BoardDTO getboard(int boardNo) {
+    public BoardDTO getBoard(int boardNo) {
+
         return boardService.getBoard(boardNo);
     }
+
+    @PostMapping("/board")
+    public void getBoard(BoardDTO boardDTO) {
+
+    }
+
 }
