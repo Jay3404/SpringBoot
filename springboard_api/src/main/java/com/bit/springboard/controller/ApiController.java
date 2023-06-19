@@ -3,12 +3,12 @@ package com.bit.springboard.controller;
 import com.bit.springboard.dto.BoardDTO;
 import com.bit.springboard.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController //@Controller + @ResponseBody
@@ -33,15 +33,77 @@ public class ApiController {
         return returnMap;
     }
 
+    @GetMapping("/testApi2")
+    public Map<String, Object> testApi2(int boardNo) {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+
+        returnMap.put("board", boardService.getBoard(boardNo));
+        returnMap.put("boardList", boardService.getBoardList());
+        List<Integer> intList = new ArrayList<Integer>();
+
+        for(int i = 0; i < 100; i++) {
+            intList.add(i);
+        }
+
+        returnMap.put("intList", intList);
+
+        return returnMap;
+
+    }
+
+
     @GetMapping("/board")
     public BoardDTO getBoard(int boardNo) {
 
         return boardService.getBoard(boardNo);
     }
 
-    @PostMapping("/board")
-    public void getBoard(BoardDTO boardDTO) {
+    @GetMapping("/boardList")
+    public List<BoardDTO> getBoardList() {
 
+        return boardService.getBoardList();
     }
+
+    @PostMapping("/board")
+    public void insertBoard(BoardDTO boardDTO) {
+
+        boardService.insertBoard(boardDTO);
+    }
+
+    @PutMapping("/board")
+    public void updateBoard(BoardDTO boardDTO) {
+
+        boardService.updateBoard(boardDTO);
+    }
+
+    @DeleteMapping("/board")
+    public void deleteBoard(int boardNo) {
+        boardService.deleteBoard(boardNo);
+    }
+
+
+    @GetMapping("/restfulapi")
+    public ResponseEntity<?> restFulApi(int boardNo) {
+        try {
+            Map<String, Object> returnMap = new HashMap<String, Object>();
+
+            returnMap.put("board", boardService.getBoard(boardNo));
+            returnMap.put("boardList", boardService.getBoardList());
+
+            List<Integer> intList = new ArrayList<Integer>();
+
+            for(int i = 0; i < 100; i++) {
+                intList.add(i);
+            }
+
+            returnMap.put("intList", intList);
+
+            return ResponseEntity.ok().body(returnMap);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e);
+        }
+    }
+
 
 }
