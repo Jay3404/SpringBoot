@@ -1,7 +1,9 @@
 package com.bit.springboard.controller;
 
 import com.bit.springboard.dto.BoardDTO;
+import com.bit.springboard.dto.ResponseDTO;
 import com.bit.springboard.service.BoardService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,38 +55,119 @@ public class ApiController {
 
 
     @GetMapping("/board")
-    public BoardDTO getBoard(int boardNo) {
+    public ResponseEntity<?> getBoard(int boardNo) {
+        ResponseDTO<BoardDTO> responseDTO = new ResponseDTO<BoardDTO>();
 
-        return boardService.getBoard(boardNo);
+        try {
+            responseDTO.setItem(boardService.getBoard(boardNo));
+
+            return ResponseEntity.ok().body(responseDTO);
+
+        } catch (Exception e) {
+
+            responseDTO.setErrorMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
     }
 
     @GetMapping("/boardList")
-    public List<BoardDTO> getBoardList() {
+    public ResponseEntity<?> getBoardList() {
 
-        return boardService.getBoardList();
+        ResponseDTO<BoardDTO> responseDTO = new ResponseDTO<BoardDTO>();
+
+        try{
+            responseDTO.setItems(boardService.getBoardList());
+
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+
+            responseDTO.setErrorMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+
     }
 
     @PostMapping("/board")
-    public void insertBoard(BoardDTO boardDTO) {
+    public ResponseEntity<?> insertBoard(BoardDTO boardDTO) {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
 
-        boardService.insertBoard(boardDTO);
+        ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<Map<String, Object>>();
+
+        try {
+
+            boardService.insertBoard(boardDTO);
+
+            returnMap.put("msg", "입력완료되었습니다.");
+
+            responseDTO.setItem(returnMap);
+
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+
+            responseDTO.setErrorMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
     }
 
     @PutMapping("/board")
-    public void updateBoard(BoardDTO boardDTO) {
+    public ResponseEntity<?> updateBoard(BoardDTO boardDTO) {
 
-        boardService.updateBoard(boardDTO);
+        ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<Map<String, Object>>();
+
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+
+        try {
+
+            if (boardService.getBoard(boardDTO.getBoardNo()) == null){
+                returnMap.put("msg", "없는 게시물입니다.");
+            } else {
+                boardService.updateBoard(boardDTO);
+                returnMap.put("msg", "수정완료되었습니다.");
+            }
+
+            responseDTO.setItem(returnMap);
+
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+
+            responseDTO.setErrorMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+
     }
 
     @DeleteMapping("/board")
-    public void deleteBoard(int boardNo) {
-        boardService.deleteBoard(boardNo);
+    public ResponseEntity<?> deleteBoard(int boardNo) {
+
+        ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<Map<String, Object>>();
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+
+        try {
+
+            if (boardService.getBoard(boardNo) == null){
+                returnMap.put("msg", "없는 게시물입니다.");
+            } else {
+                boardService.deleteBoard(boardNo);
+                returnMap.put("msg", "게시물이 삭제되었습니다.");
+            }
+
+            responseDTO.setItem(returnMap);
+
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            responseDTO.setErrorMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
     }
 
 
     @GetMapping("/restfulapi")
-    public ResponseEntity<?> restFulApi(int boardNo) {
+    public ResponseEntity<?> restFulApi(int boardNo, HttpServletResponse response) {
+
+        ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<Map<String, Object>>();
+
         try {
+
             Map<String, Object> returnMap = new HashMap<String, Object>();
 
             returnMap.put("board", boardService.getBoard(boardNo));
@@ -97,11 +180,16 @@ public class ApiController {
             }
 
             returnMap.put("intList", intList);
+            responseDTO.setItem(returnMap);
+            responseDTO.setStatusCode(response.getStatus());
 
             return ResponseEntity.ok().body(returnMap);
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e);
+            responseDTO.setStatusCode(response.getStatus());
+
+            responseDTO.setErrorMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
         }
     }
 
