@@ -2,21 +2,21 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">>
+      layout:decorate="~{layouts/layout}">
 <head>
   <th:block layout:fragment="css">
-  <style>
-    .pagination {
-      list-style: none;
-      width: 100%;
-      display: inline-block;
-    }
+    <style>
+      .pagination {
+        list-style: none;
+        width: 100%;
+        display: inline-block;
+      }
 
-    .pagination-btn {
-      float: left;
-      margin-left: 5px;
-    }
-  </style>
+      .pagination-btn {
+        float: left;
+        margin-left: 5px;
+      }
+    </style>
   </th:block>
 
   <th:block layout:fragment="script">
@@ -38,9 +38,9 @@
       });
     </script>
   </th:block>
-
 </head>
 <body>
+<div layout:fragment="content">
 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
   <h3>게시글 목록</h3>
   <form id="searchForm" action="/board/getBoardList.do" method="post">
@@ -50,7 +50,8 @@
       <tr>
         <td align="right">
           <select name="searchCondition">
-            <option value="all" th:selected="${searchCondition == 'all' || searchCondition == '' || searchConditon == null}">전체</option>
+            <option value="all" th:selected="${searchCondition == 'all' ||
+            searchCondition == '' || searchCondition == null}">전체</option>
             <option value="title" th:selected="${searchCondition == 'title'}">제목</option>
             <option value="content" th:selected="${searchCondition == 'content'}">내용</option>
             <option value="writer" th:selected="${searchCondition == 'writer'}">작성자</option>
@@ -71,7 +72,7 @@
       <th style="background: skyblue; width: 100px;">조회수</th>
     </tr>
     <tr th:each="board : ${boardList}">
-      <td th:text="${board.boardNo}"></td>
+      <td th:text="${board.boardNo }"></td>
       <td>
         <a th:text="${board.boardTitle }"
            th:href="@{/board/updateBoardCnt/{boardNo} (boardNo=${board.boardNo})}">
@@ -83,9 +84,9 @@
     </tr>
   </table>
   <br/>
-
   <br/>
   <a href="/board/insertBoard.do">새 글 등록</a>
+</div>
 </div>
 </body>
 </html>

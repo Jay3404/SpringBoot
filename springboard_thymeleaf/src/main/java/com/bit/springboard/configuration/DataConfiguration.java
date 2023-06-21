@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 //자바 설정파일로 선언
 @Configuration
@@ -65,6 +66,11 @@ DataConfiguration {
     }
 
 
+    @Bean
+    @ConfigurationProperties(prefix = "spring.jpa")
+    public Properties hibernateConfig() {
+        return new Properties();
+    }
 
 
 
