@@ -1,17 +1,17 @@
 package com.bit.springboard.service;
 
-import com.bit.springboard.dto.BoardDTO;
+import com.bit.springboard.entity.Board;
 
 import java.util.List;
 
 public interface BoardService {
-    BoardDTO getBoard(int boardNo);
+    Board getBoard(int boardNo);
 
-    List<BoardDTO> getBoardList();
+    List<Board> getBoardList();
 
-    void insertBoard(BoardDTO boardDTO);
+    void insertBoard(Board board);
 
-    void updateBoard(BoardDTO boardDTO);
+    void updateBoard(Board board);
 
     void deleteBoard(int boardNo);
 }

@@ -44,8 +44,6 @@
 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
   <h3>게시글 목록</h3>
   <form id="searchForm" action="/board/getBoardList.do" method="post">
-    <input type="hidden" name="pageNum" id="pageNum" th:value="${pageDTO.cri.pageNum }">
-    <input type="hidden" name="amount" id="amount" th:value="${pageDTO.cri.amount }">
     <table border="1" style="width: 700px; border-collapse: collapse;">
       <tr>
         <td align="right">
@@ -85,7 +83,7 @@
   </table>
   <br/>
   <br/>
-  <a href="/board/insertBoard.do">새 글 등록</a>
+  <a href="/board/insert-board-view">새 글 등록</a>
 </div>
 </div>
 </body>

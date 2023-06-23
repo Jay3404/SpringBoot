@@ -11,6 +11,6 @@ public class BoardDTO {
     private String boardTitle;
     private String boardContent;
     private String boardWriter;
-    private String boardRegDate;
+    private String boardRegdate;
     private int boardCnt;
 }

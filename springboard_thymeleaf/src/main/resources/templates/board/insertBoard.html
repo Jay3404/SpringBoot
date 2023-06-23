@@ -38,6 +38,25 @@
 
           $("#btnAtt").files = dt.files;
         });
+
+        $("#btnInsert").on("click", () => {
+          $.ajax({
+            url: '/board/board',
+            type: 'post',
+            data: $("#insertForm").serialize(),
+            success: (obj) => {
+              console.log(obj);
+              alert(obj.item.msg);
+              location.href = "/board/board-list";
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          });
+
+        });
+
+
       });
 
       //미리보기 메소드
@@ -147,7 +166,7 @@
 <div layout:fragment="content">
 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
   <h3>새 글 등록</h3>
-  <form id="insertForm" action="/board/insertBoard.do" method="post" enctype="multipart/form-data">
+  <form id="insertForm" action="/board/board" method="post" enctype="multipart/form-data">
     <table border="1" style="border-collapse: collapse">
       <tr>
         <td style="background: skyblue; width: 70px;">
@@ -162,7 +181,7 @@
           작성자
         </td>
         <td style="text-align: left;">
-          <input type="text" name="boardWriter" th:value="${loginUser.userId }" readonly>
+          <input type="text" name="boardWriter" >
         </td>
       </tr>
       <tr>
@@ -189,7 +208,7 @@
       </tr>
       <tr>
         <td colspan="2" align="center">
-          <button type="submit">새 글 등록</button>
+          <button type="button" id="btnInsert">새 글 등록</button>
         </td>
       </tr>
     </table>

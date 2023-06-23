@@ -1,7 +1,11 @@
 package com.bit.springboard.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +18,10 @@ import java.time.LocalDateTime;
         allocationSize = 1
 )
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@DynamicUpdate
 public class Board {
     //컬럼 정의
     @Id

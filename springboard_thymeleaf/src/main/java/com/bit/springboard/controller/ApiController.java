@@ -59,7 +59,7 @@ public class ApiController {
         ResponseDTO<BoardDTO> responseDTO = new ResponseDTO<BoardDTO>();
 
         try {
-            responseDTO.setItem(boardService.getBoard(boardNo));
+//            responseDTO.setItem(boardService.getBoard(boardNo));
 
             return ResponseEntity.ok().body(responseDTO);
 
@@ -76,7 +76,7 @@ public class ApiController {
         ResponseDTO<BoardDTO> responseDTO = new ResponseDTO<BoardDTO>();
 
         try{
-            responseDTO.setItems(boardService.getBoardList());
+//            responseDTO.setItems(boardService.getBoardList());
 
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class ApiController {
 
         try {
 
-            boardService.insertBoard(boardDTO);
+//            boardService.insertBoard(boardDTO);
 
             returnMap.put("msg", "입력완료되었습니다.");
 
@@ -121,7 +121,7 @@ public class ApiController {
             if (boardService.getBoard(boardDTO.getBoardNo()) == null){
                 returnMap.put("msg", "없는 게시물입니다.");
             } else {
-                boardService.updateBoard(boardDTO);
+//                boardService.updateBoard(boardDTO);
                 returnMap.put("msg", "수정완료되었습니다.");
             }
 
