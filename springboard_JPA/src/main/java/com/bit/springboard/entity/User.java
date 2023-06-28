@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -29,6 +30,10 @@ public class User {
     private String userTel;
     private LocalDateTime userRegdate = LocalDateTime.now();
 
+    @Column
+    @ColumnDefault("'ROLE_USER'")
+    private String role;
+
     public UserDTO EntityToDTO() {
         UserDTO userDTO = UserDTO.builder()
                 .id(this.id)
@@ -37,6 +42,7 @@ public class User {
                 .userEmail(this.userEmail)
                 .userTel(this.userTel)
                 .userRegdate(this.userRegdate)
+                .role(this.role)
                 .build();
 
         return userDTO;

@@ -84,7 +84,7 @@
 <body>
 <div layout:fragment="content">
 <div class="form-wrapper">
-  <form id="loginForm" action="/user/login.do" method="post">
+  <form id="loginForm" action="/user/loginProc" method="post">
     <input type="hidden" id="message" value="${message }">
     <h3>로그인</h3>
     <div class="label-wrapper">
@@ -96,7 +96,7 @@
     </div>
     <input type="password" id="userPw" name="userPw" required>
     <div style="display: block; margin: 20px auto;">
-      <button type="button" id="btnLogin">로그인</button>
+      <button type="submit" id="btnLogin">로그인</button>
     </div>
   </form>
 </div>

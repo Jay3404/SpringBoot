@@ -20,6 +20,7 @@ public class UserDTO {
     private String userEmail;
     private String userTel;
     private LocalDateTime userRegdate;
+    private String role;
 
     public User DTOToEntity() {
         User user = User.builder()
@@ -30,6 +31,7 @@ public class UserDTO {
                 .userName(this.userName)
                 .userTel(this.userTel)
                 .userRegdate(LocalDateTime.now())
+                .role(this.role)
                 .build();
 
         return user;
