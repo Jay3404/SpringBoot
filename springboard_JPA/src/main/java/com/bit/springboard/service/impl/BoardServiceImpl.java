@@ -7,6 +7,8 @@ import com.bit.springboard.repository.BoardFileRepository;
 import com.bit.springboard.repository.BoardRepository;
 import com.bit.springboard.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,5 +74,10 @@ public class BoardServiceImpl implements BoardService {
     public List<BoardFile> getBoardFileList(int boardNo) {
 
         return boardFileRepository.findByBoardBoardNo(boardNo);
+    }
+
+    @Override
+    public Page<Board> getBoardList(Pageable pageable) {
+        return boardRepository.findAll(pageable);
     }
 }

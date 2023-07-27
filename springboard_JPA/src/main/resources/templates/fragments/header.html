@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
     <header th:fragment="header">
         <h1>
@@ -16,11 +17,17 @@
         </nav>
         <nav>
             <ul class="user-nav">
-                <li>
+                <li sec:authorize="!isAuthenticated()">
                     <a href="/user/login-view">로그인</a>
                 </li>
-                <li>
+                <li sec:authorize="!isAuthenticated()">
                     <a href="/user/join-view">회원가입</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/user/modify-view" th:text="${#authentication.principal.user.userName}"></a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/user/logout">로그아웃</a>
                 </li>
             </ul>
         </nav>

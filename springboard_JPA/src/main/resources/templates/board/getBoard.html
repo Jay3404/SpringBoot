@@ -18,6 +18,16 @@
                 //thymeleaf에서 세션, 리퀘스트, 모델에 담기 값을 사용하려면
                 //script 태그에 th:inline을 선언해줘야 한다.
                 //thymeleaf 스크립트에서 자바에서 받아온 데이터 사용방법
+                const loginUser = /*[[${#authentication.principal.user.userId}]]*/;
+                const boardWriter = /*[[${board.boardWriter}]]*/;
+
+                //게시글 작성자와 로그인된 유저가 다르면 수정버튼 숨김
+                if(loginUser !== boardWriter) {
+                    $("#btnUpdate").hide();
+                    $("#btnDelete").hide();
+                    $("#boardTitle").attr("readonly", true);
+                    $("#boardContent").attr("readonly", true);
+                }
 
                 //input type="file"이 변경되면 미리보기 동작
                 $("#btnAtt").on("change", (e) => {

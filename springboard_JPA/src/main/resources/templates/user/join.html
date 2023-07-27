@@ -13,23 +13,23 @@
         align-items: center;
       }
 
-      #joinForm {
+      #modifyForm {
         width: 250px;
         text-align: center;
       }
 
-      #joinForm .label-wrapper {
+      #modifyForm .label-wrapper {
         margin-top: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
 
-      #joinForm input {
+      #modifyForm input {
         width: 100%;
       }
 
-      #joinForm div {
+      #modifyForm div {
         display: flex;
         align-items: center;
       }
@@ -66,7 +66,7 @@
           $.ajax({
             url: "/user/id-check",
             type: "post",
-            data: $("#joinForm").serialize(),
+            data: $("#modifyForm").serialize(),
             success: (obj) => {
               console.log(obj);
 
@@ -150,7 +150,7 @@
         });
 
         //joinForm 서브밋될 때 유효성 검사
-        $("#joinForm").on("submit", (e) => {
+        $("#modifyForm").on("submit", (e) => {
           //id 중복체크가 되지 않았거나 중복된 아이디를 사용했을 때
           /* if(!checkId) {
               e.preventDefault();
@@ -182,7 +182,7 @@
 <body>
 <div layout:fragment="content">
 <div class="form-wrapper">
-  <form id="joinForm" action="/user/join" method="post">
+  <form id="modifyForm" action="/user/join" method="post">
     <input type="hidden" id="joinMsg" th:value="${joinMsg }">
     <h3>회원가입</h3>
     <div class="label-wrapper">

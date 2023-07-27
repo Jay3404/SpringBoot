@@ -39,31 +39,15 @@
   <th:block layout:fragment="script">
     <script th:inline="javascript">
       $(function () {
-        $("#btnLogin").on("click", () => {
-          $.ajax({
-            url: '/user/login',
-            type: 'post',
-            data: $("#loginForm").serialize(),
-            success: (obj) => {
-              console.log(obj);
+        //현재 url 가져오기
+        const url = new URL(window.location.href);
 
-              if(obj.item.msg === "notExistId"){
-                alert("존재하지 않는 아이디입니다.");
-                return;
-              } else if(obj.item.msg === "wrongPw") {
-                alert("비밀번호가 틀렸습니다.");
-                return;
-              } else {
-                alert(`${obj.item.msg}님 환영합니다.`);
-                location.href="/"
-              }
+        //url에서 쿼리스트링 분리해서 가져오기
+        const urlParams = url.searchParams;
 
-            },
-            error: (err) => {
-              console.log(err);
-            }
-          });
-        });
+        if(urlParams.get("error")) {
+          alert(urlParams.get("errorMsg"));
+        }
       });
 
 
@@ -97,6 +81,11 @@
     <input type="password" id="userPw" name="userPw" required>
     <div style="display: block; margin: 20px auto;">
       <button type="submit" id="btnLogin">로그인</button>
+    </div>
+    <div style="display: block; margin: 20px auto;">
+      <a href="/oauth2/authorization/kakao">
+        <img src="/images/kakao_login.png" style="width: 150px;">
+      </a>
     </div>
   </form>
 </div>

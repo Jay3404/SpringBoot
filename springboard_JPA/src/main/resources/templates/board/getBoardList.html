@@ -21,15 +21,6 @@
 
   <th:block layout:fragment="script">
     <script th:inline="javascript">
-      $(function() {
-        //페이지 번호, 이전, 다음 클릭 시
-        $(".pagination a").on("click", function(e) {
-          e.preventDefault();
-
-          $("#pageNum").val($(this).attr("href"));
-          $("#searchForm").submit();
-        });
-      });
 
       $("#btnSearch").on("click", () => {
         $("#pageNum").val(1);
@@ -82,6 +73,35 @@
     </tr>
   </table>
   <br/>
+  <div style="text-align: center;">
+    <ul class="pagination" th:if="${boardList.totalElements > 0}"
+        th:with="pageNumber = ${boardList.pageable.pageNumber},
+                 pageSize = ${boardList.pageable.pageSize},
+                 totalPages = ${boardList.totalPages},
+                 startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                 tempEndPage = ${startPage + pageSize - 1},
+                 endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+      <li class="pagination-btn" th:if="${pageNumber > 0}">
+        <a th:href="@{/board/board-list(page=${pageNumber - 1})}">
+          이전
+        </a>
+      </li>
+
+      <li class="pagination-btn"
+          th:each="page : ${#numbers.sequence(startPage, endPage)}">
+        <a th:href="@{/board/board-list(page=${page - 1})}"
+          th:text="${page}">
+
+        </a>
+      </li>
+
+      <li class="pagination-btn" th:if="${pageNumber < totalPages - 1}">
+        <a th:href="@{/board/board-list(page=${pageNumber + 1})}">
+          다음
+        </a>
+      </li>
+    </ul>
+  </div>
   <br/>
   <a href="/board/insert-board-view">새 글 등록</a>
 </div>

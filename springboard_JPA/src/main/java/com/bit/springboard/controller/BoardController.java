@@ -6,12 +6,17 @@ import com.bit.springboard.dto.BoardFileDTO;
 import com.bit.springboard.dto.ResponseDTO;
 import com.bit.springboard.entity.Board;
 import com.bit.springboard.entity.BoardFile;
+import com.bit.springboard.entity.CustomUserDetails;
 import com.bit.springboard.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,27 +43,27 @@ public class BoardController {
     }
 
     @GetMapping("/board-list")
-    public ModelAndView getBoardList() {
+    public ModelAndView getBoardList(
+            @PageableDefault(page=0, size=10) Pageable pageable,
+            //security에 있는 authentication에 접근
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        customUserDetails.getUser().getUserId();
         ModelAndView mv = new ModelAndView();
 
-        List<Board> boardList = boardService.getBoardList();
+        Page<Board> pageBoardList = boardService.getBoardList(pageable);
 
-        List<BoardDTO> boardDtoList = new ArrayList<BoardDTO>();
+        Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageBoard ->
+                BoardDTO.builder()
+                        .boardTitle(pageBoard.getBoardTitle())
+                        .boardCnt(pageBoard.getBoardCnt())
+                        .boardContent(pageBoard.getBoardContent())
+                        .boardWriter(pageBoard.getBoardWriter())
+                        .boardRegdate(pageBoard.getBoardRegdate().toString())
+                        .boardNo(pageBoard.getBoardNo())
+                        .build()
+        );
 
-        for(Board b : boardList) {
-            BoardDTO returnBoardDTO = BoardDTO.builder()
-                                              .boardNo(b.getBoardNo())
-                                              .boardTitle(b.getBoardTitle())
-                                              .boardContent(b.getBoardContent())
-                                              .boardWriter(b.getBoardWriter())
-                                              .boardRegdate(b.getBoardRegdate().toString())
-                                              .boardCnt(b.getBoardCnt())
-                                              .build();
-
-            boardDtoList.add(returnBoardDTO);
-        }
-
-        mv.addObject("boardList", boardDtoList);
+        mv.addObject("boardList", pageBoardDTOList);
         mv.setViewName("board/getBoardList.html");
 
         return mv;
@@ -69,7 +74,7 @@ public class BoardController {
                                          MultipartFile[] uploadFiles,
                                          HttpServletRequest request) {
         ResponseDTO<Map<String, String>> responseDTO =
-                    new ResponseDTO<Map<String, String>>();
+                new ResponseDTO<Map<String, String>>();
 //        String attachPath =
 //                request.getSession().getServletContext().getRealPath("/")
 //                + "/upload/";
@@ -88,11 +93,11 @@ public class BoardController {
             //builder()는 모든 매개변수를 갖는 생성자를 호출하기 때문에
             //boardRegdate의 값이 null값으로 들어간다.
             Board board = Board.builder()
-                            .boardTitle(boardDTO.getBoardTitle())
-                            .boardContent(boardDTO.getBoardContent())
-                            .boardWriter(boardDTO.getBoardWriter())
-                            .boardRegdate(LocalDateTime.now())
-                            .build();
+                    .boardTitle(boardDTO.getBoardTitle())
+                    .boardContent(boardDTO.getBoardContent())
+                    .boardWriter(boardDTO.getBoardWriter())
+                    .boardRegdate(LocalDateTime.now())
+                    .build();
             System.out.println("========================"+board.getBoardRegdate());
 
             //파일처리
@@ -136,17 +141,17 @@ public class BoardController {
 
         try {
             Board board = Board.builder()
-                            .boardNo(boardDTO.getBoardNo())
-                            .boardTitle(boardDTO.getBoardTitle())
-                            .boardContent(boardDTO.getBoardContent())
-                            .boardWriter(boardDTO.getBoardWriter())
-                            .boardRegdate(
-                                    LocalDateTime.parse(
-                                            boardDTO.getBoardRegdate()
-                                    )
+                    .boardNo(boardDTO.getBoardNo())
+                    .boardTitle(boardDTO.getBoardTitle())
+                    .boardContent(boardDTO.getBoardContent())
+                    .boardWriter(boardDTO.getBoardWriter())
+                    .boardRegdate(
+                            LocalDateTime.parse(
+                                    boardDTO.getBoardRegdate()
                             )
-                            .boardCnt(boardDTO.getBoardCnt())
-                            .build();
+                    )
+                    .boardCnt(boardDTO.getBoardCnt())
+                    .build();
 
             boardService.updateBoard(board);
 
@@ -204,7 +209,7 @@ public class BoardController {
         List<BoardFile> boardFileList = boardService.getBoardFileList(boardNo);
 
         List<BoardFileDTO> boardFileDTOList =
-                            new ArrayList<BoardFileDTO>();
+                new ArrayList<BoardFileDTO>();
 
         for(BoardFile boardFile : boardFileList) {
             BoardFileDTO boardFileDTO = boardFile.EntityToDTO();
@@ -226,8 +231,6 @@ public class BoardController {
 
         return mv;
     }
-
-
 
 
 

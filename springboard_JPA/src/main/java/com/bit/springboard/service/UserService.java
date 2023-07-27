@@ -7,4 +7,7 @@ public interface UserService {
 
     void join(User user);
 
+    User findById(long id);
+
+    void modify(User modifyUser);
 }

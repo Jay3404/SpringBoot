@@ -199,7 +199,8 @@
           작성자
         </td>
         <td style="text-align: left;">
-          <input type="text" name="boardWriter">
+          <input type="text" name="boardWriter"
+                 th:value="${#authentication.principal.username}" readonly>
         </td>
       </tr>
       <tr>

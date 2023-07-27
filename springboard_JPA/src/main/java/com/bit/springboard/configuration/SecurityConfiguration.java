@@ -1,5 +1,9 @@
 package com.bit.springboard.configuration;
 
+import com.bit.springboard.handler.LoginFailureHandler;
+import com.bit.springboard.oauth.OAuth2UserService;
+import com.bit.springboard.oauth.provider.OAuth2UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +16,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+    @Autowired
+    private LoginFailureHandler loginFailureHandler;
+
+    //소셜 로그인시 사용자 정보 받아서 처리해줄 Service
+    @Autowired
+    private OAuth2UserService oAuth2UserService;
+
+
     //비밀번호 암호화를 위한 PasswordEncoder
     //복호화가 불가능. match라는 메소드를 이용해서 사용자의 입력값과 DB의 저장값을 지교
     //=> true나 false리턴
@@ -38,7 +50,7 @@ public class SecurityConfiguration {
                     authorizeRequests.requestMatchers("images/**").permitAll();
 
                     //게시판 기능은 권한을 가지고 있는 사용자만 이용가능
-                    authorizeRequests.requestMatchers("/board/**").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers("/board/**").permitAll();
                     //관리자페이지는 관리자만 사용가능
                     authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN");
                     //회원가입, 로그인, 아이디 중복 체크 등 요청은 모든 사용자가 가능
@@ -46,6 +58,7 @@ public class SecurityConfiguration {
                     authorizeRequests.requestMatchers("/user/login-view").permitAll();
                     authorizeRequests.requestMatchers("/user/join-view").permitAll();
                     authorizeRequests.requestMatchers("/user/id-check").permitAll();
+                    authorizeRequests.requestMatchers("/api/**").permitAll();
                     authorizeRequests.anyRequest().authenticated();
                 })
                 //로그인, 로그아웃 설정
@@ -60,10 +73,34 @@ public class SecurityConfiguration {
                     //로그인 요청 url 매핑
                     //매핑된 url 요청이 왔을 때, Security에서 알아서 인증처리
                     formLogin.loginProcessingUrl("/user/loginProc");
+                    //로그인 실패 핸들러 등록
+                    formLogin.failureHandler(loginFailureHandler);
                     //로그인 성공 시 띄워줄 요청 url
                     formLogin.defaultSuccessUrl("/");
 
                 })
+                //Oauth2 기반 로그인 설정
+
+                .oauth2Login((oauth2Login) -> {
+                    oauth2Login.loginPage("/user/login-view");
+                    oauth2Login.userInfoEndpoint(userInfoEndpointConfig -> {
+                        userInfoEndpointConfig.userService(oAuth2UserService);
+                    });
+                })
+
+
+
+
+                //로그아웃 처리
+                .logout((logout) -> {
+                    //로그아웃 URL 지정
+                    logout.logoutUrl("/user/logout");
+                    //사용자 인증정보가 저장된 시큐리티 컨텍스트가 세션에 저장되기 때문에 세션을 만료시켜서 컨텍스트를 제거한다.
+                    logout.invalidateHttpSession(true);
+                    //로그아웃 성공 시 호출할 요청 지정
+                    logout.logoutSuccessUrl("/user/login-view");
+                })
+                .build();
     }
 
 
