@@ -1,5 +1,6 @@
 package com.bit.todoboot.jwt;
 
+import com.bit.todoboot.entity.Member;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -33,7 +34,7 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
 //                페이로드에 들어갈 내용
 //                토큰의 주인(sub)
-                .setSubject(member)
+                .setSubject(member.getUsername())
 //                토큰 발행주체(iss)
                 .setIssuer("todo boot app")
 //                토큰 발행일자(isa)
