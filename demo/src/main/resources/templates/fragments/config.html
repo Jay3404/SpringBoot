@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:fragment="config">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Study</title>
+
+    <!--모든 페이지에서 사용할 공용 css링크-->
+    <!--thymeleaf에서 링크를 걸때는 @{}로 사용-->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <!--특정페이지에서만 사용할 css링크나 스타일시트-->
+    <!--css 따로 적용할 페이지에서 아래와 같이 작성해야된다.-->
+    <th:block layout:fragment="css">
+        <!--<style>
+
+        </style>
+        <link rel="stylesheet" th:href="">-->
+    </th:block>
+
+<!--    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">-->
+<!--    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>-->
+
+    <!--모든 페이지에서 사용할 공용 js링크-->
+    <script th:src="@{/js/main.js}"></script>
+    <!--특정 페이지에서만 동작할 js 링크나 태그 -->
+    <th:block layout:fragment="script">
+        <!--<script>
+        </script>
+
+        <script src=""></script>-->
+    </th:block>
+</head>
+<body>
+
+</body>
+</html>
